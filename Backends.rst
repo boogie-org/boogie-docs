@@ -15,7 +15,8 @@ More information can be found at https://bitbucket.org/nadiapolikarpova/boogaloo
 Corral
 ------
 
-.. todo:: Briefly discuss corral and provide link
+Corral is a solver for the reachability modulo theories problem.
+More information can be found at https://github.com/boogie-org/corral
 
 Duality
 -------
