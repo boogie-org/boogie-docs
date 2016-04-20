@@ -987,12 +987,14 @@ assumptions** with respect to entry at that implementation.
 If a Boogie IVL program has inconsistent assumptions it should be treated as correct, i.e.
 the program is "vacuously correct".
 
-If you wish to check a Boogie program for inconsistent assumptions the several methods
+If you wish to check a Boogie program for inconsistent assumptions there are several methods
+for doing so
 
-* Replace the implementation body with ``assert false``. If the program is
-  verified then (modulo bugs in the verifier) must contain inconsistent
-  assumptions. The :ref:`symbooglix_backend` has a program transformation to do
-  this transformation.
+* Replace the implementation body with ``assert false``. If the program can be
+  verified then (modulo bugs in the verifier) it must contain inconsistent
+  assumptions. The :ref:`symbooglix_backend` backend has a program
+  transformation pass that does the transformation described above that can be
+  used separately from the main :ref:`symbooglix_backend` tool.
 
 * Check the assumptions using :ref:`symbooglix_backend`.
   :ref:`symbooglix_backend` has a mode that will check assumptions before
