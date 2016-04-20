@@ -1007,6 +1007,12 @@ Debug information
 .. todo:: Discuss how to represent debug information
 
 
+Namespaces
+==========
+
+.. todo:: Discuss the different namespaces
+
+
 Grammar
 =======
 
