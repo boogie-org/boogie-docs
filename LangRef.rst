@@ -1,6 +1,11 @@
 The Boogie IVL language reference
 *********************************
 
+.. note::
+  Some more information can be found in `This is Boogie 2 <http://research.microsoft.com/en-us/um/people/leino/papers/krml178.pdf>`_ .
+  However this reference manual is **very** out-of-date and so doesn't accurately reflect the Boogie IVL as it exists today.
+  None the less some may still find it to be a useful reference.
+
 Types
 =====
 
