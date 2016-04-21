@@ -343,6 +343,36 @@ Examples
 
 .. todo:: Give examples
 
+For all
+^^^^^^^
+
+Semantics:
+
+.. todo:: Define semantics
+
+Grammar
+
+.. todo:: Define grammar
+
+Examples
+
+.. todo:: Give examples
+
+Exists
+^^^^^^
+
+Semantics:
+
+.. todo:: Define semantics
+
+Grammar
+
+.. todo:: Define grammar
+
+Examples
+
+.. todo:: Give examples
+
 Bitvector constants
 -------------------
 
