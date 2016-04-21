@@ -154,8 +154,9 @@ Global variable declarations declare variables with an identifier ``Id`` at the
 global program scope.  They can be mutable (``var``) or immutable (``const``).
 
 Immutable variables can optionally have a ``unique`` qualifier. This qualifier
-adds the assumption that this variable has a different value to all other global
-immutable variables of the same type ``Ty``.
+adds the assumption (i.e. like a axiom) that this variable has a different
+value to all other global immutable variables of the same type ``Ty`` that have
+the ``unique`` qualifier.
 
 .. warning::
   It is possible to declare several global immutable variables to be unique and
