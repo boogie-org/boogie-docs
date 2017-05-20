@@ -13,7 +13,7 @@ The following built-in types are avaible.
 
 * ``bool`` - Boolean type
 * ``int`` - Mathematical integer type
-* ``Real`` - Mathematical real type
+* ``real`` - Mathematical real type
 
 Bitvector types
 ---------------
