@@ -205,13 +205,46 @@ Semantics:
 
 Grammar:
 
-.. todo:: Define grammar
+.. productionlist::
+  procedure: "procedure" proc_sign ( ";" { spec } | { spec } impl_body )
+  proc_sign: { attribute } ident [ type_params ] proc_formals [ "returns" proc_formals ]
+  type_params: "<" ident { "," ident } ">"
+  proc_formals: "(" [ attr_ids_type_where { "," attr_ids_type_where } ")"
+  spec: ( ensures_spec | modifies_spec | requires_spec )
+  ensures_spec: [ "free" ] "ensures" { attribute } proposition ";"
+  modifies_spec: "modifies" [ ident { "," ident } ] ";"
+  requires_spec: [ "free" ] "requires" { attribute } proposition ";"
 
 Examples:
 
-.. todo:: Give examples
+.. code-block:: boogie
 
-.. _type_aliases:
+  // Procedure declaration without implementation,
+  // notice the semicolon at the end of the signature.
+  procedure Partition(l, r: int) returns (result: int);
+    requires 0 <= l && l+2 <= r && r <= N;
+    modifies A;
+    ensures  l <= result && result < r;
+    ensures  (forall k: int, j: int :: l <= k && k < result && result <= j && j < r  ==>  A[k] <= A[j]);
+    ensures  (forall k: int :: l <= k && k < result  ==>  A[k] <= old(A)[l]);
+    ensures  (forall k: int :: result <= k && k < r  ==>  old(A)[l] <= A[k]);
+
+  // Procedure with implementation.
+  procedure SumPositive(a: int, b: int) returns (c: int)
+    requires 0 <= a;
+    requires 0 <= b;
+    ensures  c == a + b && 0 <= c;
+  {
+    c := a + b;
+    return;
+  }
+
+  // Procedure declaration with type parameter.
+  procedure Identity<T>(a: T) returns (r: T);
+    ensures a == r;
+
+  // Procedure with attributes.
+  procedure {:some_attribute} {:another_attribute} Foo();
 
 Type aliases
 ------------
