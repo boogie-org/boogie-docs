@@ -1080,4 +1080,105 @@ Namespaces
 Grammar
 =======
 
-.. todo:: Show entire grammar
+.. productionlist::
+  boogie_program: { `axiom_decl` | `const_decl` | `func_decl` | `impl_decl` | `proc_decl` |  `type_decl` | `var_decl` }
+  axiom_decl: "axiom" { `attr` } `proposition` ";"
+  const_decl: "const" { `attr` } [ "unique" ] `typed_idents` [ `order_spec` ] ";"
+  func_decl: "function" { `attr` } `ident` [ `type_params` ] "(" [ `var_or_type` { "," `var_or_type` } ] ")" ( "returns" "(" `var_or_type` ")" | ":" `type` ) ( "{" `expr` "}" | ";" )
+  impl_decl: "implementation" `proc_sign` `impl_body`
+  proc_decl: "procedure" `proc_sign` ( ";" { `spec` } | { `spec` } `impl_body` )
+  type_decl: "type" { `attr` } `ident` { `ident` } [ "=" `type` ] { "," `ident` { `ident` } [ "=" `type` ] } ";"
+  var_decl: "var" { `attr` } `typed_idents_wheres` ";"
+  order_spec: "extends" [ [ "unique" ] `ident` { "," [ "unique" ] `ident` } ] [ "complete" ]
+  var_or_type: { `attr` } ( `type` | `ident` [ ":" `type` ] )
+  proc_sign: { `attr` } `ident` [ `type_params` ] "(" [ `attr_typed_idents_wheres` ] ")" [ "returns" "(" [ `attr_typed_idents_wheres` ] ")" ]
+  impl_body: "{" { `local_vars` } `stmt_list` "}"
+  stmt_list: { ( `label_or_cmd` | `transfer_cmd` | `structured_cmd` ) }
+  local_vars: "var" { `attr` } `typed_idents_wheres` ";"
+  spec: ( `modifies_spec` | `requires_spec` | `ensures_spec` )
+  modifies_spec: "modifies" [ `idents` ] ";"
+  requires_spec: [ "free" ] "requires" { `attr` } `proposition` ";"
+  ensures_spec: [ "free" ] "ensures" { `attr` } `proposition` ";"
+  label_or_cmd: ( `assert_cmd` | `assign_cmd` | `assume_cmd` | `call_cmd` | `havoc_cmd` | `label` | `par_call_cmd` | `yield_cmd` )
+  transfer_cmd: ( `goto_cmd` | `return_cmd` )
+  structured_cmd: ( `break_cmd` | `if_cmd` | `while_cmd`)
+  assert_cmd: "assert" { `attr` } `proposition` ";"
+  assign_cmd: `ident` { "[" [ `exprs` ] "]" } { "," `ident` { "[" [ `exprs` ] "]" } } ":=" `exprs` ";"
+  assume_cmd: "assume" { `attr` } `proposition` ";"
+  break_cmd: "break" [ `ident` ] ";"
+  call_cmd: [ "async" ] [ "free" ] "call" { `attr` } `call_params` ";"
+  goto_cmd: "goto" `idents` ";"
+  havoc_cmd: "havoc" `idents` ";"
+  if_cmd: "if" `guard` "{" [ "else" ( `if_cmd` | "{" `stmt_list` "}" ) ]
+  label: `ident` ":"
+  par_call_cmd: "par" { `attr` } `call_params` { "|" `call_params` } ";"
+  return_cmd: "return" ";"
+  while_cmd: "while" `guard` { [ "free" ] "invariant" { `attr` } `expr` ";" } "{" `stmt_list` "}"
+  yield_cmd: "yield" ";"
+  call_params: `ident` ( "(" [ `exprs` ] ")" | [ "," `idents` ] ":=" `ident` [ `exprs` ] ")" )
+  guard: "(" ( "*" | `expr` ) ")"
+  type: ( `type_atom` | `ident` [ `type_args` ] | `map_type` )
+  type_args: ( `type_atom` [ `type_args` ] | `ident` [ `type_args` ] | `map_type` )
+  type_atom: ( "int" | "real" | "bool" | "(" `type` ")" )
+  map_type: [ `type_params` ] "[" [ `type` { "," `type` } ] "]" `type`
+  exprs: `expr` { "," `expr` }
+  proposition: `expr`
+  expr: `implies_expr` { `equiv_op` `implies_expr` }
+  equiv_op: ( "<==>" | "⇔" )
+  implies_expr: `logical_expr` [ `implies_op` `implies_expr` | `explies_op` `logical_expr` { `explies_op` `logical_expr` } ]
+  implies_op: ( "==>" | "⇒" )
+  explies_op: ( "<==" | "⇐" )
+  logical_expr: `rel_expr` [ `and_op` `rel_expr` { `and_op` `rel_expr` } | `or_op` `rel_expr` { `or_op` `rel_expr` } ]
+  and_op: ( "&&" | "∧" )
+  or_op: ( "||" | "∨" )
+  rel_expr: `bv_term` [ `rel_op` `bv_term` ]
+  rel_op: ( "==" | "<" | ">" | "<=" | ">=" | "!=" | "<:" | "≠" | "≤" | "≥" )
+  bv_term: `term` { "++" `term` }
+  term: `factor` { `add_op` `factor` }
+  add_op: ( "+" | "-" )
+  factor: `power` { `mul_op` `power` }
+  mul_op: ( "*" | "div" | "mod" | "/" )
+  power: `unary_expr` [ "**" `power` ]
+  unary_expr: ( "-" `unary_expr` | `neg_op` `unary_expr` | `coercion_expr` )
+  neg_op: ( "!" | "¬" )
+  coercion_expr: `array_expr` { ":" ( `type` | `nat` ) }
+  array_expr: `atom_expr` { "[" [ `exprs` [ ":=" `expr` ] | ":=" `expr` ] "]" }
+  atom_expr: ( `bool_lit` | `nat` | `dec` | float | `bv_lit` | `ident` [ "(" ( `expr` | ε ) ")" ] | `old_expr` | `arith_coercion_expr` | `paren_expr` | `forall_expr` | `exists_expr` | `lambda_expr` | `if_then_else_expr` | `code_expr` )
+  bool_lit: "false" | "true"
+  nat: `digits`
+  dec: ( `decimal` | `dec_float` )
+  decimal: `digits` "e" [ "-" ] `digits`
+  dec_float: `digits` "." `digits` [ "e" [ "-" ] `digits` ]
+  bv_lit: `digits` "bv" `digits`
+  old_expr: "old" "(" `expr` ")"
+  arith_coercion_expr: ( "int" "(" `expr` ")" | "real" "(" `expr` ")" )
+  paren_expr: "(" `expr` ")"
+  forall_expr: "(" `forall` `quant_body` ")"
+  exists_expr: "(" `exists` `quant_body` ")"
+  lambda_expr: "(" `lambda` `quant_body` ")"
+  forall: ( "forall" | "∀" )
+  exists: ( "exists" | "∃" )
+  lambda: ( "lambda" | "λ" )
+  quant_body: ( `type_params` [ `bound_vars` ] | `bound_vars` ) `qsep` { `attr_or_trigger` } `expr`
+  bound_vars: `attr_typed_idents_wheres`
+  qsep: ( "::" | "•" )
+  if_then_else_expr: "if" `expr` "then" `expr` "else" `expr`
+  code_expr: "|{" { `local_vars` } `spec_block` { `speck_block`  } "}|"
+  spec_block: `ident` ":" { `label_or_cmd` } ( "goto" `idents` | "return" `expr` ) ";"
+  attr_typed_idents_wheres: `attr_typed_idents_where` { "," `attr_typed_idents_where` }
+  attr_typed_idents_where: { `attr` } `typed_idents_where`
+  typed_idents_wheres: `typed_idents_where` { "," `typed_idents_where` }
+  typed_idents_where: `typed_idents` [ "where" `expr` ]
+  typed_idents: `idents` ":" `type`
+  idents: `ident` { "," `ident` }
+  type_params: "<" `idents` ">"
+  attr: `attr_or_trigger`
+  attr_or_trigger: "{" ( ":" `ident` [ `attr_param` { "," `attr_param` } ] | `exprs` ) "}"
+  attr_param: ( `string` | `expr` )
+  string: `quote` { `string_char` | "\\\"" } `quote`
+  quote: "\""
+  string_char: any character, except newline or `quote`
+  ident: [ "\\" ] `non_digit` { `non_digit` | `digit` }
+  non_digit: ( "A…Z" | "a…z" | "'" | "~" | "#" | "$" | "^" | "_" | "." | "?" | "`" )
+  digits: `digit` { `digit` }
+  digit: "0…9"
