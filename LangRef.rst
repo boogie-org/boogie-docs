@@ -958,6 +958,21 @@ Examples
 
 .. todo:: Give examples
 
+``yield``
+^^^^^^^^^^
+
+Semantics:
+
+.. todo:: Define semantics
+
+Grammar:
+
+.. productionlist::
+  yield_cmd: "yield" ";"
+
+Examples
+
+.. todo:: Give examples
 
 Structured implementations
 ==========================
