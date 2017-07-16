@@ -107,7 +107,7 @@ lifetime of the program. A consequence of this is that axioms cannot refer to
 Grammar:
 
 .. productionlist::
-  axiom_stmt: "axiom" [ `attributes` ] `expr`;
+  axiom_decl: "axiom" { `attr` } `proposition` ";"
 
 Examples:
 
@@ -139,7 +139,8 @@ Semantics:
 
 Grammar:
 
-.. todo:: Define grammar
+.. productionlist::
+  func_decl: "function" { `attr` } `ident` [ `type_params` ] "(" [ `var_or_type` { "," `var_or_type` } ] ")" ( "returns" "(" `var_or_type` ")" | ":" `type` ) ( "{" `expr` "}" | ";" )
 
 Examples:
 
@@ -168,8 +169,8 @@ the ``unique`` qualifier.
 Grammar:
 
 .. productionlist::
-  global_var_decl: "var" [ `attributes` ] `Id`":"`Ty`;
-  global_const_decl: "const" [ "unique" ] [ `attributes` ] `Id`":"`Ty`;
+  const_decl: "const" { `attr` } [ "unique" ] `typed_idents` [ `order_spec` ] ";"
+  var_decl: "var" { `attr` } `typed_idents_wheres` ";"
 
 Examples:
 
@@ -190,7 +191,8 @@ Semantics:
 
 Grammar:
 
-.. todo:: Define grammar
+.. productionlist::
+  impl_decl: "implementation" `proc_sign` `impl_body`
 
 Examples:
 
@@ -206,14 +208,12 @@ Semantics:
 Grammar:
 
 .. productionlist::
-  procedure: "procedure" proc_sign ( ";" { spec } | { spec } impl_body )
-  proc_sign: { attribute } ident [ type_params ] proc_formals [ "returns" proc_formals ]
-  type_params: "<" ident { "," ident } ">"
-  proc_formals: "(" [ attr_ids_type_where { "," attr_ids_type_where } ")"
-  spec: ( ensures_spec | modifies_spec | requires_spec )
-  ensures_spec: [ "free" ] "ensures" { attribute } proposition ";"
-  modifies_spec: "modifies" [ ident { "," ident } ] ";"
-  requires_spec: [ "free" ] "requires" { attribute } proposition ";"
+  proc_decl: "procedure" `proc_sign` ( ";" { `spec` } | { `spec` } `impl_body` )
+  proc_sign: { `attr` } `ident` [ `type_params` ] "(" [ `attr_typed_idents_wheres` ] ")" [ "returns" "(" [ `attr_typed_idents_wheres` ] ")" ]
+  spec: ( `modifies_spec` | `requires_spec` | `ensures_spec` )
+  modifies_spec: "modifies" [ `idents` ] ";"
+  requires_spec: [ "free" ] "requires" { `attr` } `proposition` ";"
+  ensures_spec: [ "free" ] "ensures" { `attr` } `proposition` ";"
 
 Examples:
 
@@ -385,7 +385,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  forall_expr: "(" `forall` `quant_body` ")"
 
 Examples
 
@@ -400,7 +401,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  exists_expr: "(" `exists` `quant_body` ")"
 
 Examples
 
@@ -753,7 +755,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  power: `unary_expr` [ "**" `power` ]
 
 Examples
 
@@ -804,7 +807,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  if_then_else_expr: "if" `expr` "then" `expr` "else" `expr`
 
 Examples
 
@@ -819,7 +823,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  old_expr: "old" "(" `expr` ")"
 
 Examples
 
@@ -843,7 +848,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  assign_cmd: `ident` { "[" [ `exprs` ] "]" } { "," `ident` { "[" [ `exprs` ] "]" } } ":=" `exprs` ";"
 
 Examples
 
@@ -858,7 +864,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  assume_cmd: "assume" { `attr` } `proposition` ";"
 
 Examples
 
@@ -874,7 +881,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  assert_cmd: "assert" { `attr` } `proposition` ";"
 
 Examples
 
@@ -889,7 +897,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  call_cmd: [ "async" ] [ "free" ] "call" { `attr` } `call_params` ";"
 
 Examples
 
@@ -921,7 +930,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  goto_cmd: "goto" `idents` ";"
 
 Examples
 
@@ -937,7 +947,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  havoc_cmd: "havoc" `idents` ";"
 
 Examples
 
@@ -952,7 +963,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  return_cmd: "return" ";"
 
 Examples
 
@@ -976,7 +988,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  break_cmd: "break" [ `ident` ] ";"
 
 Examples
 
@@ -991,7 +1004,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  if_cmd: "if" `guard` "{" [ "else" ( `if_cmd` | "{" `stmt_list` "}" ) ]
 
 Examples
 
@@ -1006,6 +1020,9 @@ Semantics:
 .. todo:: Define semantics
 
 Grammar
+
+.. productionlist::
+  while_cmd: "while" `guard` { [ "free" ] "invariant" { `attr` } `expr` ";" } "{" `stmt_list` "}"
 
 .. todo:: Define grammar
 
