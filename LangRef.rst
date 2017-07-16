@@ -406,6 +406,22 @@ Examples
 
 .. todo:: Give examples
 
+Lambda
+^^^^^^
+
+Semantics:
+
+.. todo:: Define semantics
+
+Grammar:
+
+.. productionlist::
+  lambda_expr: "(" `lambda` `quant_body` ")"
+
+Examples
+
+.. todo:: Give examples
+
 Bitvector constants
 -------------------
 
