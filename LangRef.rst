@@ -896,7 +896,7 @@ Examples
 .. todo:: Give examples
 
 
-``call forall``
+``par call``
 ^^^^^^^^^^^^^^^
 
 Semantics:
@@ -921,7 +921,8 @@ Semantics:
 
 Grammar
 
-.. todo:: Define grammar
+.. productionlist::
+  par_call_cmd: "par" { `attr` } `call_params` { "|" `call_params` } ";"
 
 Examples
 
